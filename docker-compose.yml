@@ -1,17 +1,5 @@
 version: "3.8"  # optional since v1.27.0
 services:
-#  frontend:
-#    container_name: frontend
-#    build: 
-#      context: ./frontend
-#    ports:
-#      - 3000:3000
-#    restart: always
-#    volumes:
-#       - ./frontend:/src/app/
-#       - /src/app/node_modules
-#       - /app/.next
-
   mongo:
     image: mongo
     restart: always
@@ -20,5 +8,20 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: user123
       MONGO_INITDB_ROOT_PASSWORD: user123
-
+  frontend:
+    container_name: frontend
+    depends_on:
+      - mongo
+    build: 
+      context: .
+    ports:
+      - 3000:3000
+    restart: always
+    volumes:
+        - ./src:/src/app/
+        - /src/app/node_modules
+        - /app/.next
+    environment:
+      - MONGODB_URI=mongodb://user123:user123@localhost:27017/
+      - PAYLOAD_SECRET=pigletpack1234
 
